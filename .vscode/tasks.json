@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Celery Worker",
+            "type": "shell",
+            "windows": {
+                "command": "conda activate windsessions; cd WindSessions; celery -A WindSessions worker -l info"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Migrate Database",
+            "type": "shell",
+            "windows": {
+                "command": "conda activate windsessions; cd WindSessions; python manage.py makemigrations; python manage.py migrate"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
+
