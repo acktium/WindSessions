@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/a258db2c-b363-4a69-8c55-7354916a1ac1/resourceGroups/rg-surfsessions-gwc/providers/Microsoft.Web/sites/app-surfsessions",
+    "appService.deploySubpath": "."
+}

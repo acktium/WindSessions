@@ -1,0 +1,4 @@
+*\upload_data
+*.sqlite3
+*.env
+*\__pycache__
