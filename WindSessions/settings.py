@@ -15,25 +15,26 @@ import os
 from dotenv import load_dotenv
 from machina import MACHINA_MAIN_TEMPLATE_DIR
 
-load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-h7fz+6!okz&m73tgep2_u20mm$d-hcxclj8^1a61ai4c6=ey*h"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # OpenWeatherMap API Key
 OPENWEATHERMAP_API_KEY = os.environ.get('OPENWEATHERMAP_API_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -108,8 +109,17 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.environ.get('DBNAME'),
+    #     'HOST': os.environ.get('DBHOST'),
+    #     'USER': os.environ.get('DBUSER'),
+    #     'PASSWORD': os.environ.get('DBPASS'),
+    #     'OPTIONS': {'sslmode': 'require'},
+    # }
 }
+
 
 
 # Password validation
@@ -190,5 +200,21 @@ CACHES = {
     'machina_attachments': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'machina-attachments-cache',
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 }
