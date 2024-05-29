@@ -21,7 +21,23 @@
             "label": "Migrate Database",
             "type": "shell",
             "windows": {
-                "command": "conda activate windsessions; cd WindSessions; python manage.py makemigrations; python manage.py migrate"
+                "command": "conda activate windsessions; python manage.py makemigrations; python manage.py migrate"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Create requirements.txt",
+            "type": "shell",
+            "windows": {
+                "command": "conda activate windsessions; pip freeze > requirements.txt"
             },
             "group": {
                 "kind": "build",
@@ -35,4 +51,3 @@
         }
     ]
 }
-

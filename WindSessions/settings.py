@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from machina import MACHINA_MAIN_TEMPLATE_DIR
 
 load_dotenv()
 
@@ -46,6 +47,22 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "sessionData.apps.SessionDataConfig",  # Updated app name to reflect the new directory name
     'django_celery_results',  # For Celery results
+    # Django Machina dependencies
+    'machina',
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    # Django Machina apps
+    'machina.apps.forum',
+    'machina.apps.forum_conversation',
+    'machina.apps.forum_conversation.forum_attachments',
+    'machina.apps.forum_conversation.forum_polls',
+    'machina.apps.forum_feeds',
+    'machina.apps.forum_moderation',
+    'machina.apps.forum_search',
+    'machina.apps.forum_tracking',
+    'machina.apps.forum_member',
+    'machina.apps.forum_permission',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +73,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "WindSessions.forum_middleware.ForumPermissionMiddleware",  # Added middleware for forum permissions
 ]
 
 ROOT_URLCONF = "WindSessions.urls"
@@ -63,7 +81,10 @@ ROOT_URLCONF = "WindSessions.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            MACHINA_MAIN_TEMPLATE_DIR,
+            os.path.join(BASE_DIR, 'templates'),
+            ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -71,6 +92,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "machina.core.context_processors.metadata",  # Added for Django Machina
             ],
         },
     },
@@ -152,7 +174,21 @@ CELERY_TIMEZONE = 'UTC'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload_data') # media directory in the root directory
 MEDIA_URL = '/upload_data/'
 
+# Django Machina settings
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
 
-
-
-
+# a simple in-memory cache for machina_attachments: this is not recommended for production, use a real cache backend like Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'machina_attachments': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'machina-attachments-cache',
+    },
+}

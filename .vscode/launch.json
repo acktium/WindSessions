@@ -9,7 +9,7 @@
             "name": "Django",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/WindSessions/manage.py",
+            "program": "${workspaceFolder}/manage.py",
             "args": [
                 "runserver"
             ],

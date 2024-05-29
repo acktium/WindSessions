@@ -29,9 +29,10 @@ urlpatterns = [
     path('accounts/logout/', auth_views.logout_view, name='logout'),
     path('accounts/register/', auth_views.register_view, name='register'),
     path('session/results/<int:session_id>/', session_views.session_results, name='session_results'),
+    path('forum/', include('machina.urls')),  # Django Machina forum URLs
 ]
 
 # only in development
-if True:
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
